@@ -1,5 +1,7 @@
 package com.example.littlelemon
 
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,18 +35,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun Onboarding(){
-    var firstName by remember {
-        mutableStateOf(TextFieldValue(""))
-    }
-    var lastName by remember {
-        mutableStateOf(TextFieldValue(""))
-    }
-    var email by remember {
-        mutableStateOf(TextFieldValue(""))
-    }
+fun Onboarding(navController: NavController){
+    val context = LocalContext.current
+    var firstName by remember { mutableStateOf("")}
+    var lastName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
         , verticalArrangement = Arrangement.Center
@@ -103,7 +103,6 @@ fun Onboarding(){
             }
             , textStyle = TextStyle(fontSize = 25.sp)
             , shape = RoundedCornerShape(10.dp)
-            , label = { Text("First name") }
             , modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
@@ -124,7 +123,6 @@ fun Onboarding(){
             }
             , textStyle = TextStyle(fontSize = 25.sp)
             , shape = RoundedCornerShape(10.dp)
-            , label = { Text("Last name") }
             , modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
@@ -145,14 +143,32 @@ fun Onboarding(){
             }
             , textStyle = TextStyle(fontSize = 25.sp)
             , shape = RoundedCornerShape(10.dp)
-            , label = { Text("Email") }
             , keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             , modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
         )
         Button(
-            onClick = { /*TODO*/ }
+            onClick = { 
+                if (
+                    firstName.isNotBlank() &&
+                    lastName.isNotBlank() &&
+                    email.isNotBlank()
+                ){
+                    Toast.makeText(
+                        context, context.getString(R.string.registration_successful)
+                    , Toast.LENGTH_SHORT
+                    ).show()
+                    navController.navigate(Destinations.Home.route)
+                } else Toast.makeText(
+                    context,
+                    context.getString(R.string.registration_unsuccessful),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            , border = BorderStroke(1.dp, Color.Red)
+            , shape = RoundedCornerShape(10.dp)
+            , colors = ButtonDefaults.buttonColors(Color(0xFFDCAB3B))
             , modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
@@ -162,9 +178,9 @@ fun Onboarding(){
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-fun OnboardingPrev(){
-    Onboarding()
-}
+//@Preview(showSystemUi = true)
+//@Composable
+//fun OnboardingPrev(){
+//    Onboarding()
+//}
 
