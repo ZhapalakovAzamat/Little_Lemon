@@ -29,5 +29,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyNavigation() {
     val navHostController = rememberNavController()
-    Navigation(navHostController = navHostController)
+    val userData = false
+    Navigation(
+        navHostController = navHostController
+        , userData = userData
+
+    )
 }

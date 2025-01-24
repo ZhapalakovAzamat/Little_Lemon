@@ -1,5 +1,7 @@
 package com.example.littlelemon
 
+import android.content.Context
+import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -151,20 +153,25 @@ fun Onboarding(navController: NavController){
         Button(
             onClick = { 
                 if (
-                    firstName.isNotBlank() &&
-                    lastName.isNotBlank() &&
-                    email.isNotBlank()
+                    firstName.isBlank()
+                    && lastName.isBlank()
+                    && email.isBlank()
                 ){
                     Toast.makeText(
-                        context, context.getString(R.string.registration_successful)
+                        context, context.getString(R.string.registration_unsuccessful)
                     , Toast.LENGTH_SHORT
                     ).show()
-                    navController.navigate(Destinations.Home.route)
-                } else Toast.makeText(
-                    context,
-                    context.getString(R.string.registration_unsuccessful),
+                } else {
+                    saveToSharedPreferences(context
+                        , firstName
+                        , lastName
+                        , email
+                    )
+                    Toast.makeText(context, context.getString(R.string.registration_successful),
                     Toast.LENGTH_LONG
                 ).show()
+                navController.navigate(Destinations.Home.route)
+                }
             }
             , border = BorderStroke(1.dp, Color.Red)
             , shape = RoundedCornerShape(10.dp)
@@ -175,6 +182,21 @@ fun Onboarding(navController: NavController){
         ) {
             Text(text = "Register", color = Color.Black)
         }
+    }
+}
+
+fun saveToSharedPreferences(
+    context: Context
+    , firstName: String
+    , lastName: String
+    , email: String
+    ){
+    val sharedP = context.getSharedPreferences("userData", Context.MODE_PRIVATE) ?: return
+    with(sharedP.edit()) {
+        putString("firstName", firstName)
+        putString("lastName", lastName)
+        putString("email", email)
+        apply()
     }
 }
 
