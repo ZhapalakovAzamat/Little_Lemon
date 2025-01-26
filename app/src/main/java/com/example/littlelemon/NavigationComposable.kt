@@ -19,10 +19,15 @@ fun Navigation(navHostController: NavHostController, userData: Boolean){
             HomeScreen(navHostController)
         }
         composable(Destinations.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(navHostController)
         }
         composable(Destinations.Onboarding.route) {
             Onboarding(navHostController)
         }
     }
 }
+
+const val USER_DATA = "userData"
+const val FIRST_NAME = "firstName"
+const val LAST_NAME = "lastName"
+const val EMAIL = "email"

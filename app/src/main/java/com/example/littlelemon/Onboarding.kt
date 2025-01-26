@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,13 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun Onboarding(navController: NavController){
     val context = LocalContext.current
-    var firstName by remember { mutableStateOf("")}
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    var firstName by rememberSaveable { mutableStateOf("")}
+    var lastName by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
         , verticalArrangement = Arrangement.Center
@@ -173,7 +175,7 @@ fun Onboarding(navController: NavController){
                 navController.navigate(Destinations.Home.route)
                 }
             }
-            , border = BorderStroke(1.dp, Color.Red)
+            , border = BorderStroke(1.dp, Color(0xFFF47836))
             , shape = RoundedCornerShape(10.dp)
             , colors = ButtonDefaults.buttonColors(Color(0xFFDCAB3B))
             , modifier = Modifier
@@ -200,9 +202,10 @@ fun saveToSharedPreferences(
     }
 }
 
-//@Preview(showSystemUi = true)
-//@Composable
-//fun OnboardingPrev(){
-//    Onboarding()
-//}
+@Preview(showSystemUi = true)
+@Composable
+fun OnboardingPrev(){
+    val navController = rememberNavController()
+    Onboarding(navController)
+}
 
